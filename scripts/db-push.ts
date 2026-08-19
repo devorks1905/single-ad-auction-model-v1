@@ -2,6 +2,10 @@
  * Vercel/Render build sırasında çalışır — tabloları oluşturur/günceller.
  */
 import { Pool } from "pg";
+import dns from "dns";
+
+// IPv4 çözümlemesini zorla
+dns.setDefaultResultOrder("ipv4first");
 
 async function main() {
   const url = process.env.DATABASE_URL;
@@ -16,8 +20,6 @@ async function main() {
   const pool = new Pool({
     connectionString: url,
     ssl: { rejectUnauthorized: false },
-    // IPv4'e zorla (Render free tier IPv6 desteklemiyor)
-    family: 4,
   });
 
   try {

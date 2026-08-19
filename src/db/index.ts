@@ -1,6 +1,10 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
+import dns from "dns";
 import * as schema from "./schema";
+
+// IPv4 çözümlemesini zorla
+dns.setDefaultResultOrder("ipv4first");
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -17,8 +21,6 @@ export const pool =
   new Pool({
     connectionString: databaseUrl,
     ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : undefined,
-    // IPv4'e zorla (Render free tier IPv6 desteklemiyor)
-    family: 4,
   });
 
 if (process.env.NODE_ENV !== "production") {
